@@ -32,6 +32,8 @@ export class UserController {
     private userRoleService: UserRoleService,
   ) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin, Role.user)
   @Get(USERS_URL)
   async getUsers() {
     const users = await this.userService.getUsers();
