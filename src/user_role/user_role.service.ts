@@ -53,6 +53,18 @@ export class UserRoleService {
         userId: user.id,
         roleId: role.id,
       },
+      include: {
+        role: true,
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            createdAt: true,
+          },
+        },
+      },
     });
 
     return assignRole;
