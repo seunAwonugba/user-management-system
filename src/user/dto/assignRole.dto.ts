@@ -5,5 +5,5 @@ export class AssignRoleDto {
   userId: string;
 
   @IsNotEmpty()
-  roleId: any;
+  roleId: string;
 }

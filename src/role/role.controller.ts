@@ -5,11 +5,16 @@ import { RoleDto } from './dto/role.dto';
 import { Roles } from '../decorator/roles.decorator';
 import { Role } from '../enum/role.enum';
 import { RolesGuard } from '../guard/roles.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller(ROLE_PREFIX)
+@ApiTags('role')
 export class RoleController {
   constructor(private roleService: RoleService) {}
 
+  /**
+   * Create role
+   */
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
   @Post()

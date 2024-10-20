@@ -9,11 +9,16 @@ import { AuthService } from './auth.service';
 import { UserDto } from './dto/user.dto';
 import { LoginDto } from './dto/login.dto';
 import { Public } from '../utils/skip-auth';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller(AUTH_PREFIX)
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  /**
+   * Register a new user
+   */
   @Public()
   @Post(SIGNUP_URL)
   async signup(@Body() userDto: UserDto) {
@@ -25,6 +30,9 @@ export class AuthController {
     };
   }
 
+  /**
+   * Authenticate a user and return a JWT token
+   */
   @Public()
   @Post(LOGIN_URL)
   async login(@Body() loginDto: LoginDto) {
@@ -36,6 +44,9 @@ export class AuthController {
     };
   }
 
+  /**
+   * User logout
+   */
   @Public()
   @Get(LOGOUT_URL)
   async logout() {

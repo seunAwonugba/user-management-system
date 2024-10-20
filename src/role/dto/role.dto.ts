@@ -1,9 +1,13 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { PermissionDto } from './permission.dto';
+import { Type } from 'class-transformer';
 
 export class RoleDto {
   @IsNotEmpty()
   name: string;
 
   @IsNotEmpty()
-  permissions: any;
+  @ValidateNested()
+  @Type(() => PermissionDto)
+  permissions: PermissionDto[];
 }

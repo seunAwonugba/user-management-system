@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, Role } from '@prisma/client';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class RoleService {
   constructor(private prismaService: PrismaService) {}
-  async createRole(data: Prisma.RoleCreateInput): Promise<Role> {
+  async createRole(data: any): Promise<Role> {
     const createRole = await this.prismaService.role.create({
       data,
     });

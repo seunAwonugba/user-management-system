@@ -24,14 +24,20 @@ import { AssignRoleDto } from './dto/assignRole.dto';
 import { Roles } from '../decorator/roles.decorator';
 import { Role } from '../enum/role.enum';
 import { RolesGuard } from '../guard/roles.guard';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller(USER_PREFIX)
+@ApiTags('users')
+@ApiBearerAuth('JWT')
 export class UserController {
   constructor(
     private userService: UserService,
     private userRoleService: UserRoleService,
   ) {}
 
+  /**
+   * Get users
+   */
   @UseGuards(RolesGuard)
   @Roles(Role.admin, Role.user)
   @Get(USERS_URL)
@@ -44,6 +50,9 @@ export class UserController {
     };
   }
 
+  /**
+   * Delete user
+   */
   @Permissions([
     {
       resource: Resource.users,
@@ -52,8 +61,8 @@ export class UserController {
   ])
   @UseGuards(AuthorizationGuard)
   @Delete(`${USERS_URL}/:id`)
-  async deleteUser(@Param() params: any) {
-    await this.userService.deleteUser(Number(params.id));
+  async deleteUser(@Param('id') id: string) {
+    await this.userService.deleteUser(Number(id));
 
     return {
       success: true,
@@ -62,6 +71,9 @@ export class UserController {
     };
   }
 
+  /**
+   * Assign role to a user
+   */
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
   @Post(ASSIGN_ROLE)
