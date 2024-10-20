@@ -22,3 +22,5 @@ export const PERMISSIONS_KEY = 'permissions';
 export const USER_DELETE_SUCCESSFUL = 'User deleted successfully';
 export const USER_NOT_FOUND = 'User not found';
 export const ROLE_NOT_FOUND = 'Role not found';
+export const NO_ACCESS_TO_RESOURCE =
+  'User does not have access to this resource';

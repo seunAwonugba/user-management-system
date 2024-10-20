@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
@@ -37,10 +38,17 @@ export class UserService {
     return user;
   }
 
-  async getUserById(id: number): Promise<User | null> {
+  async getUserById(id: number) {
     const user = await this.prismaService.user.findUnique({
       where: {
         id,
+      },
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
       },
     });
 
@@ -50,7 +58,11 @@ export class UserService {
   async getUsers(): Promise<User[]> {
     const getUsers = await this.prismaService.user.findMany({
       include: {
-        roles: true,
+        roles: {
+          include: {
+            role: true,
+          },
+        },
       },
     });
     const users = getUsers.map((item) => {
@@ -74,5 +86,17 @@ export class UserService {
     });
 
     return deleteUser;
+  }
+
+  async getUserAdminPermissions(id: number) {
+    const user = await this.getUserById(id);
+    if (!user) {
+      throw new NotFoundException(USER_NOT_FOUND);
+    }
+    const adminPermissions = user.roles
+      .filter((item) => item.role.name === 'admin')
+      .flatMap((item) => item.role.permissions);
+
+    return adminPermissions;
   }
 }
