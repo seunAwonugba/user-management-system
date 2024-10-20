@@ -30,3 +30,11 @@ export function hasRequiredPermissions(userPermissions, requiredPermissions) {
     });
   });
 }
+
+export function checkUserRoles(userRoles, requiredRoles) {
+  // Extract role names from userRoles and create a Set to ensure uniqueness
+  const userRoleNames = new Set(userRoles.map((role) => role.role.name));
+
+  // Check if all required roles are in the user's role set
+  return requiredRoles.every((role) => userRoleNames.has(role));
+}

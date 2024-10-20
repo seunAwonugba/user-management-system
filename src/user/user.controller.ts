@@ -21,6 +21,9 @@ import { Action } from '../enum/action.enum';
 import { AuthorizationGuard } from '../guard/authorization.guard';
 import { UserRoleService } from '../user_role/user_role.service';
 import { AssignRoleDto } from './dto/assignRole.dto';
+import { Roles } from '../decorator/roles.decorator';
+import { Role } from '../enum/role.enum';
+import { RolesGuard } from '../guard/roles.guard';
 
 @Controller(USER_PREFIX)
 export class UserController {
@@ -56,6 +59,9 @@ export class UserController {
       statusCode: HttpStatus.OK,
     };
   }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin)
   @Post(ASSIGN_ROLE)
   async assignRole(@Body() assignRoleDto: AssignRoleDto) {
     const assignRole = await this.userRoleService.assignRole(assignRoleDto);

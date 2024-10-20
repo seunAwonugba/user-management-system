@@ -1,8 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { RoleService } from '../role/role.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { ROLE_NOT_FOUND, USER_NOT_FOUND } from '../constant/constants';
+import {
+  ROLE_NOT_FOUND,
+  ROLE_PREVIOUSLY_ASSIGNED,
+  USER_NOT_FOUND,
+} from '../constant/constants';
 import { UserRole } from '../user/interfaces/user.interface';
 
 @Injectable()
@@ -29,6 +37,17 @@ export class UserRoleService {
       throw new NotFoundException(ROLE_NOT_FOUND);
     }
 
+    const userRolePayload = {
+      userId: user.id,
+      roleId: role.id,
+    };
+
+    const getUserRole = await this.getUserRole(userRolePayload);
+
+    if (getUserRole) {
+      throw new BadRequestException(ROLE_PREVIOUSLY_ASSIGNED);
+    }
+
     const assignRole = await this.prismaService.userRole.create({
       data: {
         userId: user.id,
@@ -37,5 +56,19 @@ export class UserRoleService {
     });
 
     return assignRole;
+  }
+
+  async getUserRole(payload: any) {
+    const userId = payload.userId;
+    const roleId = payload.roleId;
+
+    const getUserRole = await this.prismaService.userRole.findFirst({
+      where: {
+        userId,
+        roleId,
+      },
+    });
+
+    return getUserRole;
   }
 }
