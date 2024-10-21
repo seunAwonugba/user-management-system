@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ROLE_PREFIX } from '../constant/constants';
 import { RoleService } from './role.service';
 import { RoleDto } from './dto/role.dto';
@@ -20,6 +20,10 @@ export class RoleController {
   @Post()
   async createRole(@Body() roleDto: RoleDto) {
     const createRole = await this.roleService.createRole(roleDto);
-    return createRole;
+    return {
+      success: true,
+      data: createRole,
+      statusCode: HttpStatus.CREATED,
+    };
   }
 }
