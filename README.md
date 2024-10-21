@@ -51,3 +51,7 @@ npm run start
 npm run test user.controller.spec.ts
 npm run test user.controller.spec.ts
 ```
+
+## OpenApi Documentation
+
+- [Swagger Documentation](http://localhost:3000/api)
