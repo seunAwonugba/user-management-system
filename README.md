@@ -49,7 +49,7 @@ npm run start
 
 ```bash
 npm run test user.controller.spec.ts
-npm run test user.controller.spec.ts
+npm run test auth.controller.spec.ts
 ```
 
 ## OpenApi Documentation
